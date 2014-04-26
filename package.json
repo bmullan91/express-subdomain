@@ -1,6 +1,10 @@
 {
   "name": "express-subdomain",
-  "version": "0.0.0",
+  "version": "0.0.1",
+   "repository": {
+    "type": "git",
+    "url": "git://github.com/bmullan91/express-subdomain.git"
+  },
   "description": "Simple and lightweight middleware to handle subdomains",
   "main": "index.js",
   "scripts": {

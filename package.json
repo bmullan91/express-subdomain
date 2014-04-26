@@ -1,0 +1,16 @@
+{
+  "name": "express-subdomain",
+  "version": "0.0.0",
+  "description": "Simple and lightweight middleware to handle subdomains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "express-subdomain",
+    "subdomain"
+  ],
+  "author": "Brian Mullan",
+  "license": "ISC"
+}

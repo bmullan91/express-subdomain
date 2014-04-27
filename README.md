@@ -1,11 +1,20 @@
 #express-subdomain
 
-##Document needs reviewed.
+Is simply express middleware. In the examples below I am using [Express v4.x](http://expressjs.com/).
 
-__express-subdomain__ is simply express middleware. In the examples below I am using Express v4.x
+##Install
+
+With npm, saving it as a dependency.
+
+    npm i express-subdomain --save
 
 ``` js
 var subdomain = require('express-subdomain');
+```
+
+Express boilerplate code:
+
+``` js
 var express = require('express');
 var app = express();
 
@@ -17,7 +26,7 @@ app.get('/', function(req, res) {
     
 ##Simple usage
 
-In this example we are providing RESTful API via `http://api.example.com`
+Let's say you want to provide a RESTful API via the url `http://api.example.com`
 
 ``` js
 var router = express.Router();
@@ -46,7 +55,7 @@ The API is alive:
 `http://api.example.com/users` --> "[{"name":"Brian"}]"
 
 
-##Multi-level Sub Domains
+##Multi-level Subdomains
 
 The subdomain can be mullti-level:
 ``` js
@@ -57,14 +66,11 @@ app.use(subdomain('v1.api', router)); //using the same router
 
 `http://v1.api.example.com/users` --> "[{"name":"Brian"}]"
 
-----------
-
 ###Wildcards
 
-Say we wanted to ensure that the user has an API key before getting access to the api, and this is across __all__ versions.
+Say we wanted to ensure that the user has an API key before getting access to it... and this is across __all__ versions.
 
 _Note_:
-
 In the example below, the passed function to subdomain can be just a pure piece of middleware.
 
 ``` js
@@ -78,14 +84,16 @@ var checkUser = subdomain('*.*.api', function(req, res, next) {
 app.use(checkUser);
 ```
     
-This can be used in tandem with the examples above, note the order in which the calls the app.use() is very important. Read more about it here. __add link__
+This can be used in tandem with the examples above. 
+
+_Note_:
+The order in which the calls the app.use() is very important. Read more about it [here](http://expressjs.com/4x/api.html#app.use).
 
 ``` js
 app.use(checkUser);
 app.use(subdomain('v1.api', router));
 ```
 
-----------
 ##Divide and Conquer
     
 The subdomains can also be chained, for example the we can achieve the same result as above but with more fine grained control.
@@ -127,3 +135,19 @@ app.listen(3000);
 `http://v1.api.example.com/` --> API - version 1
 
 `http://v2.api.example.com/` --> API - version 2
+
+#Testing locally
+
+To test the above examples you will need to modify your /etc/hosts file:
+
+    127.0.0.1       example.com
+    127.0.0.1       api.example.com
+    127.0.0.1       v1.api.example.com
+    127.0.0.1       v2.api.example.com
+
+You can then visit any of the above urls on the port passed to app.list(3000).
+
+
+##TODO
+
+ - Tests

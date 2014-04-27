@@ -7,6 +7,10 @@ Is simply express middleware. In the examples below I am using [Express v4.x](ht
 With npm, saving it as a dependency.
 
     npm i express-subdomain --save
+    
+##Simple usage
+
+Let's say you want to provide a RESTful API via the url `http://api.example.com`
 
 ``` js
 var subdomain = require('express-subdomain');
@@ -23,10 +27,8 @@ app.get('/', function(req, res) {
     res.send('Homepage');
 });
 ```
-    
-##Simple usage
 
-Let's say you want to provide a RESTful API via the url `http://api.example.com`
+The API routes
 
 ``` js
 var router = express.Router();

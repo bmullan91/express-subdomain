@@ -1,10 +1,8 @@
 #express-subdomain
-------------------
 
 ##Document needs reviewed.
 
-
-__express-subdomain__ represents subdomain handling as express middleware: Express (v4.x) boilerplate code:
+__express-subdomain__ is simply express middleware. In the examples below I am using Express v4.x
     
     var subdomain = require('express-subdomain');
     var express = require('express');
@@ -32,9 +30,9 @@ In this example we are providing RESTful API via `http://api.example.com`
         ]);
     });
     
-Now all we have to do is register the subdomain middleware:
+Now register the subdomain middleware:
     
-    app.use(subdomain('api', router);
+    app.use(subdomain('api', router));
     app.listen(3000);
     
 The API is alive: 
@@ -43,7 +41,6 @@ The API is alive:
 
 `http://api.example.com/users` --> "[{"name":"Brian"}]"
 
-----------
 
 ##Multi-level Sub Domains
 
@@ -84,11 +81,11 @@ This can be used in tandem with the examples above, note the order in which the 
 ----------
 ##Divide and Conquer
     
-The subdomains can also be chained, for example the we can achieve more fine grained control over the examples above.
+The subdomains can also be chained, for example the we can achieve the same result as above but with more fine grained control.
 
     var router = express.Router(); //main api router
-    var v1Routes = express.Router(); //assign .get .post etc methods..
-    var v2Routes = express.Router(); //same here..
+    var v1Routes = express.Router(); 
+    var v2Routes = express.Router();
     
     //basic routing..
     router.get('/', function(req, res) {

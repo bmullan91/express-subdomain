@@ -1,4 +1,4 @@
-module.exports = function(hostname, router) {
+module.exports = function(subdomain, router) {
 
   //check router handles three params..
   if(!router || router.length < 3) {
@@ -8,15 +8,15 @@ module.exports = function(hostname, router) {
   return function (req, res, next) {
     req._subdomainLevel = req._subdomainLevel || 0;
 
-    var hostnameSplit = hostname.split('.');
-    var len = hostnameSplit.length;
+    var subdomainSplit = subdomain.split('.');
+    var len = subdomainSplit.length;
     var match = true;
 
     //url - 2.api.example.dom
     //subdomains == ['api', '2']
-    //hostnameSplit = ['2', 'api']
+    //subdomainSplit = ['2', 'api']
     for(var i = 0; i < len; i++) {
-      var expected = hostnameSplit[len - (i+1)];
+      var expected = subdomainSplit[len - (i+1)];
       var actual = req.subdomains[i+req._subdomainLevel];
 
       if(expected === '*') { continue; }
@@ -28,8 +28,7 @@ module.exports = function(hostname, router) {
     }
 
     if(match) {
-      //modify the request object, to enabling chaining
-      req._subdomainLevel++;
+      req._subdomainLevel++;//enables chaining
       return router(req, res, next);
     }
     next();

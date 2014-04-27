@@ -57,7 +57,6 @@ The API is alive:
 
 ##Multi-level Subdomains
 
-The subdomain can be mullti-level:
 ``` js
 app.use(subdomain('v1.api', router)); //using the same router
 ```
@@ -128,7 +127,7 @@ app.listen(3000);
 
 `http://api.example.com/` --> Permission denied.
 
-####Invalid user
+####Valid user
     
 `http://api.example.com/` --> Welcome to the API!
 
@@ -145,7 +144,7 @@ To test the above examples you will need to modify your /etc/hosts file:
     127.0.0.1       v1.api.example.com
     127.0.0.1       v2.api.example.com
 
-You can then visit any of the above urls on the port passed to app.list(3000).
+You can then visit any of the above urls on the port passed to `app.list(3000)`.
 
 
 ##TODO

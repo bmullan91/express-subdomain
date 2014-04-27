@@ -1,8 +1,8 @@
-module.exports = function(subdomain, router) {
+module.exports = function(subdomain, fn) {
 
-  //check router handles three params..
-  if(!router || router.length < 3) {
-      throw new Error("The router function passed to subdomain must handle req, res, and next params.");
+  //check fn handles three params..
+  if(!fn || fn.length < 3) {
+      throw new Error("The fn function passed to subdomain must handle req, res, and next params.");
   }
 
   return function (req, res, next) {
@@ -29,7 +29,7 @@ module.exports = function(subdomain, router) {
 
     if(match) {
       req._subdomainLevel++;//enables chaining
-      return router(req, res, next);
+      return fn(req, res, next);
     }
     next();
   };

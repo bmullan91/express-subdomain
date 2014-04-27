@@ -115,6 +115,13 @@ v2Routes.get('/', function(req, res) {
     res.send('API - version 2');
 });
 
+var checkUser = subdomain('*.*', function(req, res, next) {
+    if(!req.session.user.valid) {
+        return res.send('Permission denied.');
+    }
+    next();
+});
+
 //the api middleware flow
 router.use(checkUser);
 router.use.(subdomain('v1', v1Routes));

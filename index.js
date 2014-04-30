@@ -1,8 +1,11 @@
 module.exports = function(subdomain, fn) {
+  if(!subdomain || typeof subdomain !== "string") {
+    throw new Error("The first parameter must be a string representing the subdomain");
+  }
 
   //check fn handles three params..
-  if(!fn || fn.length < 3) {
-      throw new Error("The fn function passed to subdomain must handle req, res, and next params.");
+  if(!fn || typeof fn !== "function" || fn.length < 3) {
+      throw new Error("The second parameter must be a function that handles fn(req, res, next) params.");
   }
 
   return function (req, res, next) {

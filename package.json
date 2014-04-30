@@ -1,7 +1,7 @@
 {
   "name": "express-subdomain",
   "version": "0.0.2",
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "git://github.com/bmullan91/express-subdomain.git"
   },
@@ -16,5 +16,11 @@
     "subdomain"
   ],
   "author": "Brian Mullan",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "express": "~4.1.1",
+    "mocha": "~1.18.2",
+    "request": "~2.34.0",
+    "chai": "~1.9.1"
+  }
 }

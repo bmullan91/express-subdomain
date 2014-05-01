@@ -22,6 +22,8 @@ Express boilerplate code:
 var express = require('express');
 var app = express();
 
+// *** Code examples below go here! ***
+
 // example.com
 app.get('/', function(req, res) {
     res.send('Homepage');
@@ -104,10 +106,6 @@ var router = express.Router(); //main api router
 var v1Routes = express.Router(); 
 var v2Routes = express.Router();
 
-//basic routing..
-router.get('/', function(req, res) {
-    res.send('Welcome to the API!');
-});
 v1Routes.get('/', function(req, res) {
     res.send('API - version 1');
 });
@@ -115,17 +113,22 @@ v2Routes.get('/', function(req, res) {
     res.send('API - version 2');
 });
 
-var checkUser = subdomain('*.*', function(req, res, next) {
+var checkUser = function(req, res, next) {
     if(!req.session.user.valid) {
         return res.send('Permission denied.');
     }
     next();
-});
+};
 
 //the api middleware flow
 router.use(checkUser);
-router.use.(subdomain('v1', v1Routes));
-router.use.(subdomain('v2', v2Routes));
+router.use.(subdomain('*.v1', v1Routes));
+router.use.(subdomain('*.v2', v2Routes));
+
+//basic routing..
+router.get('/', function(req, res) {
+    res.send('Welcome to the API!');
+});
 
 //attach the api
 app.use(subdomain('api', router));
@@ -141,8 +144,10 @@ app.listen(3000);
 `http://api.example.com/` --> Welcome to the API!
 
 `http://v1.api.example.com/` --> API - version 1
+`http://abc.v1.api.example.com/` --> API - version 1
 
 `http://v2.api.example.com/` --> API - version 2
+`http://abc.v2.api.example.com/` --> API - version 2
 
 #Testing locally
 

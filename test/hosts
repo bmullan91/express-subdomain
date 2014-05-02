@@ -3,5 +3,6 @@
 127.0.0.1       api.example.com
 127.0.0.1       v1.api.example.com
 127.0.0.1       v2.api.example.com
-127.0.0.1       abc.v1.api.example.com
-127.0.0.1       abc.v2.api.example.com
+127.0.0.1       c.b.a.v1.api.example.com
+127.0.0.1       c.b.a.v2.api.example.com
+

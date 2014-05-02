@@ -1,25 +1,23 @@
 module.exports = {
-  /*
-    Very simple factory for creating an express app
-
-    config = {
-      root: 'root response body',
-      subdomains: [
-        {
-          path: 'api',
-          router: fn 
-        },
-        {
-          ...
-        }
-      ],
-      mw: [fn, fn]
-    }
-  */
+  /**
+    * A simple factory for creating an express app's 
+    *
+    * @param config {Object} app configuration, see example below
+    *
+    *  {
+    *    mw: [fn, fn],
+    *    root: [
+    *      {
+    *        path: '/',
+    *        method: 'get',
+    *        response: 'hello world'
+    *      }
+    *    ]
+    *  }
+    */
   create: function(config) {
     config = config || {};
 
-    var subdomain = require('../');
     var express = require('express');
     var app = express();
 
@@ -30,15 +28,10 @@ module.exports = {
       });
     }
 
-    if(config.subdomains) {
-      config.subdomains.forEach(function (sub) {
-        app.use(subdomain(sub.path, sub.router));
+    config.root.forEach(function (handler) {
+      app[handler.method](handler.path, function (req, res) {
+        res.send(handler.response || '');
       });
-    }
-
-    //default respose
-    app.get('/', function(req, res) {
-      res.end(config.root);
     });
 
     return app;

@@ -1,21 +1,9 @@
-var express = require('express');
+var colors = require('colors');
 var request = require('request');
 var expect = require('chai').expect;
 
 var server = require('./server');
 var subdomain = require('../');
-
-var PORT          = 3000;
-var API_SUBDOMAIN = 'api';
-var BASE          = 'example.com';
-var HOSTNAME      = API_SUBDOMAIN + '.' +BASE;      // api.example.com
-var BASE_URL      = BASE + ':' +PORT;               // example.com:3000
-var API_URL       = API_SUBDOMAIN + '.' + BASE_URL; // api.example.com:3000
-var V1_API_URL    = 'v1.' + API_URL;                // v1.api.example.com:3000
-var V2_API_URL    = 'v2.' + API_URL;                // v2.api.example.com:3000
-
-var app;      // to be assigned in tests
-var response; // same here...
 
 describe('Validation checks - They should ALL throw Error\'s', function () {
   
@@ -59,222 +47,256 @@ describe('Validation checks - They should ALL throw Error\'s', function () {
 
 });
 
+describe('Testing the api subdoain, and its various levels', function() {
+  var PORT          = 3000;
+  var API_SUBDOMAIN = 'api';
+  var BASE          = 'example.com';
+  var HOSTNAME      = API_SUBDOMAIN + '.' +BASE;      // api.example.com
+  var BASE_URL      = BASE + ':' +PORT;               // example.com:3000
+  var API_URL       = API_SUBDOMAIN + '.' + BASE_URL; // api.example.com:3000
+  var V1_API_URL    = 'v1.' + API_URL;                // v1.api.example.com:3000
+  var V2_API_URL    = 'v2.' + API_URL;                // v2.api.example.com:3000
 
-before(function (done) {
+  describe('Simple example', function () {
 
-  ////////////////////////////////
-  // test setup
-  ////////////////////////////////
-  var router = express.Router(); //api router
-  var v1Router = express.Router();
-  var v2Router = express.Router();
+    //to be assigned in the 'before' hook (below)
+    var appServer; 
+    var responses;
 
-  response = {
-    root: 'Homepage!',
-    api: {
-      error: 'Permission denied.',
-      root: {
-        '/': 'Welcome to our API!',
-        '/users': [{ name: 'Brian'}]
-      },
-      v1: {
-        '/': 'API - version 1',
-        '/users': [{ name: 'Jimmy'}]
-      },
-      v2: {
-        '/': 'API - version 1',
-        '/users': [{ name: 'Joe'}]
-      }
-    }
-  };
+    before(function (done) {
 
-  v1Router.get('/', function(req, res) {
-    res.send(response.api.v1['/']);
-  });
+      ////////////////////////////////
+      // test setup
+      ////////////////////////////////
+      var simpleExample = require('./examples/simple');
+      var rootResp = 'Simple example homepage!';
+      var app = server.create({
+        mw: [simpleExample.subdomain],
+        root:[{
+          path: '/',
+          method: 'get',
+          response: rootResp
+        }]
+      });
 
-  v1Router.get('/users', function(req, res) {
-    res.send(response.api.v1['/users']);
-  });
+      responses = simpleExample.responses;
+      responses.rootResp = rootResp;
+      appServer = app.listen(PORT, HOSTNAME, done);
 
-  v2Router.get('/', function(req, res) {
-    res.send(response.api.v2['/']);
-  });
-
-  v2Router.get('/users', function(req, res) {
-    res.send(response.api.v2['/users']);
-  });
-
-  //chaining our subdomains and middleware
-  router.use(function (req, res, next) {
-    if(req.headers['invalid'] === 'true') {
-      return res.end(response.api.error);
-    } else {
-      res.setHeader("valid", "true");
-      next();
-    }
-  });
-  router.use(subdomain('*.v1', v1Router));
-  router.use(subdomain('*.v2', v2Router));
-
-  //basic routing..
-  router.get('/', function(req, res) {
-    res.send(response.api.root['/']);
-  });
-
-  router.get('/users', function(req, res) {
-    res.send(response.api.root['/users']);
-  });
-
-  app = server.create({
-    root: response.root,
-    subdomains: [{
-      path: 'api',
-      router: router
-    }],
-    mw: []
-  });
-
-  app.listen(PORT, HOSTNAME, done);
-
-});
-
-describe('Testing the api subdomain', function() {
-
-  ///////////////////////////////
-  //        example.com        //
-  ///////////////////////////////
-
-  it('GET ' + BASE_URL, function (done) {
-    request('http://'+ BASE_URL, function (error, res, body) {
-      expect(body).to.equal(response.root);
-      done();
     });
-  });
 
-  ///////////////////////////////
-  //      api.example.com      //
-  ///////////////////////////////
+    ///////////////////////////////
+    //        example.com        //
+    ///////////////////////////////
 
-  it('GET ' + API_URL + ' * INVALID USER *', function (done) {
-    //custom header for testing purposes
-    var opts = {
-      url: 'http://' + API_URL,
-      headers: {
-        'invalid': 'true'
-      }
-    };
+    it('GET ' + BASE_URL, function (done) {
+      request('http://'+ BASE_URL, function (error, res, body) {
+        expect(body).to.equal(responses.rootResp);
+        done();
+      });
+    });
 
-    request(opts, function (error, res, body) {
-      expect(body).to.equal(response.api.error);
-      done();
+    ///////////////////////////////
+    //      api.example.com      //
+    ///////////////////////////////
+
+    it('GET ' + API_URL, function (done) {
+      request('http://' + API_URL, function (error, res, body) {
+        expect(body).to.equal(responses['/']);
+        done();
+      });
+    });
+
+    it('GET ' + API_URL + '/users', function (done) {
+      request('http://' + API_URL + '/users', function (error, res, body) {
+        expect(body).to.equal( JSON.stringify(responses['/users']) );
+        done();
+      });
+    });
+
+    after(function(done) {
+      appServer.close(function() {
+        console.log('\t ♻ server recycled'.cyan);
+        done();
+      });
     });
 
   });
 
-  it('GET ' + API_URL, function (done) {
-    request('http://' + API_URL, function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal(response.api.root['/']);
-      done();
-    });
-  });
 
-  it('GET ' + API_URL + '/users', function (done) {
-    request('http://' + API_URL + '/users', function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal( JSON.stringify(response.api.root['/users']) );
-      done();
-    });
-  });
+  describe('Divide and Conquer example', function () {
 
-  ///////////////////////////////
-  //    v1.api.example.com     //
-  ///////////////////////////////
+    //to be assigned in the 'before' hook (below)
+    var appServer; 
+    var responses;
 
-  it('GET ' + V1_API_URL + ' * INVALID USER *', function (done) {
-    //custom header for testing purposes
-    var opts = {
-      url: 'http://' + V1_API_URL,
-      headers: {
-        'invalid': 'true'
-      }
-    };
+    before(function (done) {
 
-    request(opts, function (error, res, body) {
-      expect(body).to.equal(response.api.error);
-      done();
+      ////////////////////////////////
+      // test setup
+      ////////////////////////////////
+      var api = require('./examples/divideAndConquer');
+      var rootResp = 'Divide and conquer homepage!';
+      var app = server.create({
+        mw: [api.mw],
+        root:[{
+          path: '/',
+          method: 'get',
+          response: rootResp
+        }]
+      });
+
+      responses = api.responses;
+      responses.rootResp = rootResp;
+      appServer = app.listen(PORT, HOSTNAME, done);
+
     });
 
-  });
+    ///////////////////////////////
+    //        example.com        //
+    ///////////////////////////////
 
-  it('GET ' + V1_API_URL, function (done) {
-    request('http://' + V1_API_URL, function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal(response.api.v1['/']);
-      done();
-    });
-  });
-
-  it('GET ' + V1_API_URL + '/users', function (done) {
-    request('http://' + V1_API_URL + '/users', function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal( JSON.stringify(response.api.v1['/users']) );
-      done();
-    });
-  });
-
-  //curve ball..
-  it('GET abc.' + V1_API_URL, function (done) {
-    request('http://abc.' + V1_API_URL, function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal(response.api.v1['/']);
-      done();
-    });
-  });
-
-  ///////////////////////////////
-  //    v2.api.example.com     //
-  ///////////////////////////////
-
-  it('GET ' + V2_API_URL + ' * INVALID USER *', function (done) {
-    //custom header for testing purposes
-    var opts = {
-      url: 'http://' + V2_API_URL,
-      headers: {
-        'invalid': 'true'
-      }
-    };
-
-    request(opts, function (error, res, body) {
-      expect(body).to.equal(response.api.error);
-      done();
+    it('GET ' + BASE_URL, function (done) {
+      request('http://'+ BASE_URL, function (error, res, body) {
+        expect(body).to.equal(responses.rootResp);
+        done();
+      });
     });
 
-  });
+    ///////////////////////////////
+    //      api.example.com      //
+    ///////////////////////////////
 
-  it('GET ' + V2_API_URL, function (done) {
-    request('http://' + V2_API_URL, function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal(response.api.v2['/']);
-      done();
-    });
-  });
+    it('GET ' + API_URL + ' * INVALID USER *', function (done) {
+      //custom header for testing purposes
+      var opts = {
+        url: 'http://' + API_URL,
+        headers: {
+          'invalid': 'true'
+        }
+      };
 
-  it('GET ' + V2_API_URL + '/users', function (done) {
-    request('http://' + V2_API_URL + '/users', function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal( JSON.stringify(response.api.v2['/users']) );
-      done();
-    });
-  });
+      request(opts, function (error, res, body) {
+        expect(body).to.equal(responses.error);
+        done();
+      });
 
-  //curve ball..
-  it('GET abc.' + V2_API_URL, function (done) {
-    request('http://abc.' + V2_API_URL, function (error, res, body) {
-      expect(res.headers['valid']).to.be.equal('true');
-      expect(body).to.equal(response.api.v2['/']);
-      done();
     });
+
+    it('GET ' + API_URL, function (done) {
+      request('http://' + API_URL, function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal(responses.root['/']);
+        done();
+      });
+    });
+
+    it('GET ' + API_URL + '/users', function (done) {
+      request('http://' + API_URL + '/users', function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal( JSON.stringify(responses.root['/users']) );
+        done();
+      });
+    });
+
+    ///////////////////////////////
+    //    v1.api.example.com     //
+    ///////////////////////////////
+
+    it('GET ' + V1_API_URL + ' * INVALID USER *', function (done) {
+      //custom header for testing purposes
+      var opts = {
+        url: 'http://' + V1_API_URL,
+        headers: {
+          'invalid': 'true'
+        }
+      };
+
+      request(opts, function (error, res, body) {
+        expect(body).to.equal(responses.error);
+        done();
+      });
+
+    });
+
+    it('GET ' + V1_API_URL, function (done) {
+      request('http://' + V1_API_URL, function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal(responses.v1['/']);
+        done();
+      });
+    });
+
+    it('GET ' + V1_API_URL + '/users', function (done) {
+      request('http://' + V1_API_URL + '/users', function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal( JSON.stringify(responses.v1['/users']) );
+        done();
+      });
+    });
+
+    //curve ball..
+    it('GET c.b.a.' + V1_API_URL, function (done) {
+      request('http://c.b.a.' + V1_API_URL, function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal(responses.v1['/']);
+        done();
+      });
+    });
+
+    ///////////////////////////////
+    //    v2.api.example.com     //
+    ///////////////////////////////
+
+    it('GET ' + V2_API_URL + ' * INVALID USER *', function (done) {
+      //custom header for testing purposes
+      var opts = {
+        url: 'http://' + V2_API_URL,
+        headers: {
+          'invalid': 'true'
+        }
+      };
+
+      request(opts, function (error, res, body) {
+        expect(body).to.equal(responses.error);
+        done();
+      });
+
+    });
+
+    it('GET ' + V2_API_URL, function (done) {
+      request('http://' + V2_API_URL, function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal(responses.v2['/']);
+        done();
+      });
+    });
+
+    it('GET ' + V2_API_URL + '/users', function (done) {
+      request('http://' + V2_API_URL + '/users', function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal( JSON.stringify(responses.v2['/users']) );
+        done();
+      });
+    });
+
+    //curve ball..
+    it('GET c.b.a.' + V2_API_URL, function (done) {
+      request('http://c.b.a.' + V2_API_URL, function (error, res, body) {
+        expect(res.headers['valid']).to.be.equal('true');
+        expect(body).to.equal(responses.v2['/']);
+        done();
+      });
+    });
+
+    after(function(done) {
+      appServer.close(function() {
+        console.log('\t ♻ server recycled'.cyan);
+        done();
+      });
+    });
+
+
   });
 
 });

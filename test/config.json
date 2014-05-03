@@ -1,0 +1,12 @@
+{
+  "PORT": 3000,
+  "urls": {
+    "API_SUBDOMAIN": "api",
+    "BASE"         : "example.com",
+    "HOSTNAME"     : "api.example.com",
+    "BASE_URL"     : "example.com:3000",
+    "API_URL"      : "api.example.com:3000",
+    "V1_API_URL"   : "v1.api.example.com:3000",
+    "V2_API_URL"   : "v2.api.example.com:3000"
+  }
+}

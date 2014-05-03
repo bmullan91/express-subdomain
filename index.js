@@ -15,9 +15,9 @@ module.exports = function(subdomain, fn) {
     var len = subdomainSplit.length;
     var match = true;
 
-    //url - 2.api.example.dom
-    //subdomains == ['api', '2']
-    //subdomainSplit = ['2', 'api']
+    //url - v2.api.example.dom
+    //subdomains == ['api', 'v2']
+    //subdomainSplit = ['v2', 'api']
     for(var i = 0; i < len; i++) {
       var expected = subdomainSplit[len - (i+1)];
       var actual = req.subdomains[i+req._subdomainLevel];

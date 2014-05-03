@@ -71,7 +71,7 @@ app.use(subdomain('v1.api', router)); //using the same router
 
 ###Wildcards
 
-Say we wanted to ensure that the user has an API key before getting access to it... and this is across __all__ versions.
+Say you wanted to ensure that the user has an API key before getting access to it... and this is across __all__ versions.
 
 _Note_:
 In the example below, the passed function to subdomain can be just a pure piece of middleware.
@@ -99,7 +99,7 @@ app.use(subdomain('v1.api', router));
 
 ##Divide and Conquer
     
-The subdomains can also be chained, for example the we can achieve the same result as above but with more fine grained control.
+The subdomains can also be chained, for example to achieve the same behaviour as above:
 
 ``` js
 var router = express.Router(); //main api router
@@ -148,19 +148,3 @@ app.listen(3000);
 
 `http://v2.api.example.com/` --> API - version 2
 `http://abc.v2.api.example.com/` --> API - version 2
-
-#Testing locally
-
-To test the above examples you will need to modify your /etc/hosts file:
-
-    127.0.0.1       example.com
-    127.0.0.1       api.example.com
-    127.0.0.1       v1.api.example.com
-    127.0.0.1       v2.api.example.com
-
-You can then visit any of the above urls on the port passed to `app.list(3000)`.
-
-
-##TODO
-
- - Tests

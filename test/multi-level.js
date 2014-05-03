@@ -15,9 +15,7 @@ var responses = {
   },
   api: {
     '/': 'Welcome to our multi-level API!',
-    '/users': [
-      { name: "Brian" }
-    ]
+    '/users': [{ name: "Luke" }]
   }
 };
 

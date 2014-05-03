@@ -15,9 +15,7 @@ var responses = {
   },
   api: {
     '/': 'Welcome to our simple API!',
-    '/users': [
-      { name: "Brian" }
-    ]
+    '/users': [{ name: "Brian" }]
   }
 };
 

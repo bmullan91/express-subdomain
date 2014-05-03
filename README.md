@@ -153,4 +153,4 @@ app.listen(3000);
 
 #Complete Examples
 
-Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/tests/test)!
+Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/master/test)!

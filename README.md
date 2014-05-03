@@ -144,7 +144,13 @@ app.listen(3000);
 `http://api.example.com/` --> Welcome to the API!
 
 `http://v1.api.example.com/` --> API - version 1
+
 `http://abc.v1.api.example.com/` --> API - version 1
 
 `http://v2.api.example.com/` --> API - version 2
+
 `http://abc.v2.api.example.com/` --> API - version 2
+
+#Complete Examples
+
+Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/tests/test)!

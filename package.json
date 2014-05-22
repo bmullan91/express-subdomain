@@ -8,7 +8,8 @@
   "description": "Simple and lightweight middleware to handle subdomains",
   "main": "index.js",
   "scripts": {
-    "test": "./test/pre-script.sh; ./node_modules/.bin/mocha --reporter spec; ./test/post-script.sh"
+    "test": "./test/pre-script.sh; ./node_modules/.bin/mocha --reporter spec; ./test/post-script.sh",
+    "coverage": "./test/pre-script.sh; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage; ./test/post-script.sh"
   },
   "keywords": [
     "express",
@@ -22,6 +23,9 @@
     "mocha": "~1.18.2",
     "request": "~2.34.0",
     "chai": "~1.9.1",
-    "colors": "~0.6.2"
+    "colors": "~0.6.2",
+    "coveralls": "~2.10.0",
+    "mocha-lcov-reporter": "0.0.1",
+    "istanbul": "~0.2.10"
   }
 }

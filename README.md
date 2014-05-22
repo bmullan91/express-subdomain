@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/bmullan91/express-subdomain.svg?branch=master)](https://travis-ci.org/bmullan91/express-subdomain)
-
-[![Coverage Status](https://coveralls.io/repos/bmullan91/express-subdomain/badge.png?branch=master)](https://coveralls.io/r/bmullan91/express-subdomain?branch=master)
+[![Build Status](https://travis-ci.org/bmullan91/express-subdomain.svg?branch=master)](https://travis-ci.org/bmullan91/express-subdomain) [![Coverage Status](https://coveralls.io/repos/bmullan91/express-subdomain/badge.png?branch=master)](https://coveralls.io/r/bmullan91/express-subdomain?branch=master)
 
 #express-subdomain
 

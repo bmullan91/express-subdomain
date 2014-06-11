@@ -151,6 +151,6 @@ app.listen(3000);
 
 `http://abc.v2.api.example.com/` --> API - version 2
 
-#Complete Examples
+##Need in-depth examples? 
 
 Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/master/test)!

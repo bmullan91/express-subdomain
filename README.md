@@ -14,13 +14,10 @@ With npm, saving it as a dependency.
 
 Let's say you want to provide a RESTful API via the url `http://api.example.com`
 
+###Express boilerplate code:
+
 ``` js
 var subdomain = require('express-subdomain');
-```
-
-Express boilerplate code:
-
-``` js
 var express = require('express');
 var app = express();
 
@@ -30,9 +27,10 @@ var app = express();
 app.get('/', function(req, res) {
     res.send('Homepage');
 });
+
 ```
 
-The API routes
+##API Router
 
 ``` js
 var router = express.Router();

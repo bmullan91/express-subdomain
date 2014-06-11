@@ -14,7 +14,7 @@ With npm, saving it as a dependency.
 
 Let's say you want to provide a RESTful API via the url `http://api.example.com`
 
-###Express boilerplate code:
+####Express boilerplate code:
 
 ``` js
 var subdomain = require('express-subdomain');
@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 
 ```
 
-##API Router
+####API Router
 
 ``` js
 var router = express.Router();
@@ -77,7 +77,7 @@ _Note_:
 In the example below, the passed function to subdomain can be just a pure piece of middleware.
 
 ``` js
-var checkUser = subdomain('*.*.api', function(req, res, next) {
+var checkUser = subdomain('*.api', function(req, res, next) {
     if(!req.session.user.valid) {
         return res.send('Permission denied.');
     }
@@ -90,7 +90,7 @@ app.use(checkUser);
 This can be used in tandem with the examples above. 
 
 _Note_:
-The order in which the calls the app.use() is very important. Read more about it [here](http://expressjs.com/4x/api.html#app.use).
+The order in which the calls to app.use() is very important. Read more about it [here](http://expressjs.com/4x/api.html#app.use).
 
 ``` js
 app.use(checkUser);

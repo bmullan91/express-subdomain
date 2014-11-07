@@ -151,6 +151,32 @@ app.listen(3000);
 
 `http://abc.v2.api.example.com/` --> API - version 2
 
+##Developing Locally
+
+If you plan to use this middleware while developing locally, you'll have to
+ensure that your subdomain is listed in your hosts file.
+
+On Linux or OSX, add your subdomain to `/etc/hosts`:
+```
+127.0.0.1       myapp.dev
+127.0.0.1       subdomain.myapp.dev
+```
+
+You may not have write permissions on your hosts file, in which case you can
+grant them:
+```
+$ sudo chmod a+rw /etc/hosts
+```
+
+_Note_:
+Express parses the request URL for a top level domain, so developing locally
+without one won't be possible because Express will treat the subdomain as the
+domain, and the actual domain as a TLD.
+
+####Windows
+
+On Windows 7 and 8, the hosts file path is `%systemroot%\system32\drivers\etc`.
+
 ##Need in-depth examples? 
 
 Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/master/test)!

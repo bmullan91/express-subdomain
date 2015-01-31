@@ -1,20 +1,20 @@
 [![Build Status](https://travis-ci.org/bmullan91/express-subdomain.svg?branch=master)](https://travis-ci.org/bmullan91/express-subdomain) [![Coverage Status](https://coveralls.io/repos/bmullan91/express-subdomain/badge.png?branch=master)](https://coveralls.io/r/bmullan91/express-subdomain?branch=master)
 
-#express-subdomain
+# express-subdomain
 
 Is simply express middleware. In the examples below I am using [Express v4.x](http://expressjs.com/).
 
-##Install
+## Install
 
 With npm, saving it as a dependency.
 
     npm i express-subdomain --save
     
-##Simple usage
+## Simple usage
 
 Let's say you want to provide a RESTful API via the url `http://api.example.com`
 
-####Express boilerplate code:
+#### Express boilerplate code:
 
 ``` js
 var subdomain = require('express-subdomain');
@@ -30,7 +30,7 @@ app.get('/', function(req, res) {
 
 ```
 
-####API Router
+#### API Router
 
 ``` js
 var router = express.Router();
@@ -59,7 +59,7 @@ The API is alive:
 `http://api.example.com/users` --> "[{"name":"Brian"}]"
 
 
-##Multi-level Subdomains
+## Multi-level Subdomains
 
 ``` js
 app.use(subdomain('v1.api', router)); //using the same router
@@ -69,7 +69,7 @@ app.use(subdomain('v1.api', router)); //using the same router
 
 `http://v1.api.example.com/users` --> "[{"name":"Brian"}]"
 
-###Wildcards
+### Wildcards
 
 Say you wanted to ensure that the user has an API key before getting access to it... and this is across __all__ versions.
 
@@ -97,7 +97,7 @@ app.use(checkUser);
 app.use(subdomain('v1.api', router));
 ```
 
-##Divide and Conquer
+## Divide and Conquer
     
 The subdomains can also be chained, for example to achieve the same behaviour as above:
 
@@ -135,11 +135,11 @@ app.use(subdomain('api', router));
 app.listen(3000);
 ```
     
-####Invalid user
+#### Invalid user
 
 `http://api.example.com/` --> Permission denied.
 
-####Valid user
+#### Valid user
     
 `http://api.example.com/` --> Welcome to the API!
 
@@ -151,7 +151,7 @@ app.listen(3000);
 
 `http://abc.v2.api.example.com/` --> API - version 2
 
-##Developing Locally
+## Developing Locally
 
 If you plan to use this middleware while developing locally, you'll have to
 ensure that your subdomain is listed in your hosts file.
@@ -173,10 +173,10 @@ Express parses the request URL for a top level domain, so developing locally
 without one won't be possible because Express will treat the subdomain as the
 domain, and the actual domain as a TLD.
 
-####Windows
+#### Windows
 
 On Windows 7 and 8, the hosts file path is `%systemroot%\system32\drivers\etc`.
 
-##Need in-depth examples? 
+## Need in-depth examples? 
 
 Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/master/test)!

@@ -1,6 +1,6 @@
 {
   "name": "express-subdomain",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/bmullan91/express-subdomain.git"
@@ -19,13 +19,14 @@
   "author": "Brian Mullan <bmullan91@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "express": "~4.1.1",
-    "mocha": "~1.18.2",
-    "request": "~2.34.0",
     "chai": "~1.9.1",
     "colors": "~0.6.2",
+    "composable-middleware": "^0.3.0",
     "coveralls": "~2.10.0",
+    "express": "~4.1.1",
+    "istanbul": "~0.2.10",
+    "mocha": "~1.18.2",
     "mocha-lcov-reporter": "0.0.1",
-    "istanbul": "~0.2.10"
+    "request": "~2.34.0"
   }
 }

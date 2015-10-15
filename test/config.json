@@ -8,6 +8,13 @@
     "API_URL"      : "api.example.com:3000",
     "STATIC_URL"   : "static.example.com:3000",
     "V1_API_URL"   : "v1.api.example.com:3000",
-    "V2_API_URL"   : "v2.api.example.com:3000"
+    "V2_API_URL"   : "v2.api.example.com:3000",
+
+    "MULTI_TLD": {
+      "BASE": "example.co.uk",
+      "HOSTNAME": "api.example.co.uk",
+      "BASE_URL": "example.co.uk:3000",
+      "API_URL": "api.example.co.uk:3000"
+    }
   }
 }

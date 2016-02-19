@@ -9,7 +9,7 @@ Is simply express middleware. In the examples below I am using [Express v4.x](ht
 With npm, saving it as a dependency.
 
     npm i express-subdomain --save
-    
+
 ## Simple usage
 
 Let's say you want to provide a RESTful API via the url `http://api.example.com`
@@ -46,13 +46,13 @@ router.get('/users', function(req, res) {
     ]);
 });
 ```
-    
+
 Now register the subdomain middleware:
 ``` js
 app.use(subdomain('api', router));
 app.listen(3000);
 ```
-The API is alive: 
+The API is alive:
 
 `http://api.example.com/` --> "Welcome to our API!"
 
@@ -86,8 +86,8 @@ var checkUser = subdomain('*.api', function(req, res, next) {
 
 app.use(checkUser);
 ```
-    
-This can be used in tandem with the examples above. 
+
+This can be used in tandem with the examples above.
 
 _Note_:
 The order in which the calls to app.use() is very important. Read more about it [here](http://expressjs.com/4x/api.html#app.use).
@@ -98,12 +98,12 @@ app.use(subdomain('v1.api', router));
 ```
 
 ## Divide and Conquer
-    
+
 The subdomains can also be chained, for example to achieve the same behaviour as above:
 
 ``` js
 var router = express.Router(); //main api router
-var v1Routes = express.Router(); 
+var v1Routes = express.Router();
 var v2Routes = express.Router();
 
 v1Routes.get('/', function(req, res) {
@@ -134,13 +134,13 @@ router.get('/', function(req, res) {
 app.use(subdomain('api', router));
 app.listen(3000);
 ```
-    
+
 #### Invalid user
 
 `http://api.example.com/` --> Permission denied.
 
 #### Valid user
-    
+
 `http://api.example.com/` --> Welcome to the API!
 
 `http://v1.api.example.com/` --> API - version 1
@@ -177,6 +177,15 @@ domain, and the actual domain as a TLD.
 
 On Windows 7 and 8, the hosts file path is `%systemroot%\system32\drivers\etc`.
 
-## Need in-depth examples? 
+## Gotchas
+
+Multilevel TLD's, such as `.co.uk` you have to pass `api.example` as the _subdomain_:
+
+```js
+app.use(subdomain('api.example', router));
+```
+See https://github.com/bmullan91/express-subdomain/issues/17 for more info.
+
+## Need in-depth examples?
 
 Have a look at the [tests](https://github.com/bmullan91/express-subdomain/tree/master/test)!

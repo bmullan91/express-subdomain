@@ -97,6 +97,12 @@ app.use(checkUser);
 app.use(subdomain('v1.api', router));
 ```
 
+If you want to handle any subdomain you can use the following.
+
+```js
+app.use(subdomain('*.www', router))
+```
+
 ## Divide and Conquer
 
 The subdomains can also be chained, for example to achieve the same behaviour as above:

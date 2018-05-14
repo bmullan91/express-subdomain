@@ -9,7 +9,7 @@ module.exports = function(subdomain, fn) {
   }
 
   return function (req, res, next) {
-    req._subdomainLevel = req._subdomainLevel || 0;
+    req._subdomainLevel = req.subdomains.length - 1;
 
     var subdomainSplit = subdomain.split('.');
     var len = subdomainSplit.length;

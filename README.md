@@ -158,8 +158,8 @@ ensure that your subdomain is listed in your hosts file.
 
 On Linux or OSX, add your subdomain to `/etc/hosts`:
 ```
-127.0.0.1       myapp.dev
-127.0.0.1       subdomain.myapp.dev
+127.0.0.1       myapp.tech
+127.0.0.1       subdomain.myapp.tech
 ```
 
 You may not have write permissions on your hosts file, in which case you can

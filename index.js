@@ -22,7 +22,7 @@ module.exports = function(subdomain, fn) {
       var expected = subdomainSplit[len - (i+1)];
       var actual = req.subdomains[i+req._subdomainLevel];
 
-      if(expected === '*') { continue; }
+      if(expected === '*' && actual) { continue; }
 
       if(actual !== expected) {
           match = false;

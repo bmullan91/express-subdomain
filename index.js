@@ -18,19 +18,24 @@ module.exports = function(subdomain, fn) {
     //url - v2.api.example.dom
     //subdomains == ['api', 'v2']
     //subdomainSplit = ['v2', 'api']
+    const subdomains = [];
     for(var i = 0; i < len; i++) {
       var expected = subdomainSplit[len - (i+1)];
       var actual = req.subdomains[i+req._subdomainLevel];
+
 
       if(expected === '*') { continue; }
 
       if(actual !== expected) {
           match = false;
           break;
+      } else {
+        subdomains.push(actual);
       }
     }
 
     if(match) {
+      req.subdomains = subdomains;
       req._subdomainLevel++;//enables chaining
       return fn(req, res, next);
     }

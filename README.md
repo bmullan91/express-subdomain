@@ -69,6 +69,19 @@ app.use(subdomain('v1.api', router)); //using the same router
 
 `http://v1.api.example.com/users` --> "[{"name":"Brian"}]"
 
+
+
+## '@' support
+
+``` js
+app.use(subdomain('@', mainRouter));
+app.use(subdomain('api', apiRouter));
+```
+
+`http://example.com/` --> "<h1>Welcome to our website</h1>"
+
+`http://api.example.com/` --> "Welcome to our API!"
+
 ### Wildcards
 
 Say you wanted to ensure that the user has an API key before getting access to it... and this is across __all__ versions.

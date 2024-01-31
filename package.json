@@ -7,6 +7,7 @@
   },
   "description": "Simple and lightweight middleware to handle subdomains",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "test": "./test/pre-script.sh; ./node_modules/.bin/mocha --reporter spec; ./test/post-script.sh",
     "coverage": "./test/pre-script.sh; istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage; ./test/post-script.sh"

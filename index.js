@@ -1,4 +1,6 @@
 module.exports = function(subdomain, fn) {
+  subdomain = subdomain.replace(/\.@/g, '');
+  
   if(!subdomain || typeof subdomain !== "string") {
     throw new Error("The first parameter must be a string representing the subdomain");
   }
@@ -15,23 +17,25 @@ module.exports = function(subdomain, fn) {
     var len = subdomainSplit.length;
     var match = true;
 
-    //url - v2.api.example.dom
-    //subdomains == ['api', 'v2']
-    //subdomainSplit = ['v2', 'api']
-    for(var i = 0; i < len; i++) {
-      var expected = subdomainSplit[len - (i+1)];
-      var actual = req.subdomains[i+req._subdomainLevel];
+    if (!(subdomain === '@' && req.subdomains.length === 0)) {
+      //url - v2.api.example.dom
+      //subdomains == ['api', 'v2']
+      //subdomainSplit = ['v2', 'api']
+      for(var i = 0; i < len; i++) {
+        var expected = subdomainSplit[len - (i+1)];
+        var actual = req.subdomains[i+req._subdomainLevel];
 
-      if(expected === '*') { continue; }
+        if (expected === '*') { continue; }
 
-      if(actual !== expected) {
+        if(actual !== expected) {
           match = false;
           break;
+        }
       }
     }
 
     if(match) {
-      req._subdomainLevel++;//enables chaining
+      req._subdomainLevel++; // enables chaining
       return fn(req, res, next);
     }
     next();
